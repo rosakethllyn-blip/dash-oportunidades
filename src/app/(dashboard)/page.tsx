@@ -101,9 +101,11 @@ export default function DashboardPage() {
     ?.map((m) => ({
       name: `${formatMonth(m.month)}/${m.year.toString().slice(-2)}`,
       total: m.total,
+      year: m.year,
+      month: m.month,
+      sortKey: m.year * 100 + m.month,
     }))
-    .reverse()
-    .slice(-12) || [];
+    .sort((a, b) => a.sortKey - b.sortKey) || [];
 
   const categoryData = stats?.byCategory
     ?.filter((c) => c.total > 0)
