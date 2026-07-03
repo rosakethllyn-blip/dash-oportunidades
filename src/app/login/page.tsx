@@ -105,21 +105,21 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 hmsvp-gradient">
       <Card className="w-full max-w-md hmsvp-card">
-        <CardHeader className="space-y-4 text-center pb-2">
+        <CardHeader className="space-y-3 text-center pb-2">
           {/* Logo HMSVP completa */}
-          <div className="flex justify-center">
+          <div className="flex justify-center pt-2">
             <img
               src="/logo-hmsvp-completo.svg"
               alt="Hospital Maternidade São Vicente de Paulo"
-              className="h-24 w-auto"
+              className="h-16 w-auto"
             />
           </div>
-          <div>
-            <CardTitle className="text-2xl font-bold text-[#1b2b4b]">
+          <div className="pt-1">
+            <CardTitle className="text-xl font-bold text-[#1b2b4b]">
               Oportunidades
             </CardTitle>
-            <CardDescription className="text-[#223978] mt-1">
-              Sistema de Monitoramento de Ocorrências em Convênios
+            <CardDescription className="text-xs text-[#223978] mt-0.5">
+              Monitoramento de Ocorrências em Convênios
             </CardDescription>
           </div>
         </CardHeader>
