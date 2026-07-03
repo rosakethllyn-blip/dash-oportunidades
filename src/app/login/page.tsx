@@ -69,6 +69,12 @@ export default function LoginPage() {
       return;
     }
 
+    if (password.length < 6) {
+      setError("A senha deve ter no mínimo 6 caracteres");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/register", {
         method: "POST",
@@ -97,7 +103,7 @@ export default function LoginPage() {
         router.refresh();
       }, 1000);
     } catch (err) {
-      setError("Erro ao criar conta");
+      setError("Erro ao criar conta. Tente novamente.");
       setIsLoading(false);
     }
   };

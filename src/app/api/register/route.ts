@@ -28,7 +28,7 @@ export async function POST(request: Request) {
 
     if (existingUser) {
       return NextResponse.json(
-        { error: "Este email já está cadastrado" },
+        { error: "Este email já está cadastrado. Tente fazer login." },
         { status: 400 }
       );
     }
