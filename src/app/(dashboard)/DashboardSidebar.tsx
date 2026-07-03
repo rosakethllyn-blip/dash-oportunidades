@@ -57,9 +57,6 @@ export function DashboardSidebar() {
                 className="h-14 w-auto"
               />
             </div>
-            <p className="text-xs text-white/70 text-center mt-2">
-              Sistema de Oportunidades
-            </p>
           </div>
 
           <nav className="flex-1 p-4 space-y-2">
