@@ -42,6 +42,7 @@ interface Sector {
   id: string;
   name: string;
   type: string;
+  year?: number;
 }
 
 export default function DashboardPage() {
