@@ -50,11 +50,11 @@ export function DashboardSidebar() {
       >
         <div className="flex flex-col h-full text-white">
           <div className="p-6 border-b border-white/10">
-            <div className="bg-white rounded-lg p-3 mb-3">
+            <div className="flex justify-center">
               <img
-                src="/logo-hmsvp-completo.svg"
+                src="/logo-hmsvp-branco.svg"
                 alt="HMSVP"
-                className="h-16 w-auto mx-auto"
+                className="h-14 w-auto"
               />
             </div>
             <p className="text-xs text-white/70 text-center mt-2">
