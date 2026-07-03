@@ -1,6 +1,9 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useSession } from "next-auth/react";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 
@@ -29,8 +31,9 @@ interface Category {
 }
 
 export default function NewOccurrencePage() {
-  const router = useRouter();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: session } = useSession();
+  const router = useRouter();
   const [sectors, setSectors] = useState<Sector[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -95,7 +98,7 @@ export default function NewOccurrencePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#145799]"></div>
       </div>
     );
   }
@@ -109,21 +112,21 @@ export default function NewOccurrencePage() {
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Nova Ocorrência</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-[#1b2b4b]">Nova Ocorrência</h1>
           <p className="text-muted-foreground">
             Cadastre uma nova ocorrência no sistema
           </p>
         </div>
       </div>
 
-      <Card>
+      <Card className="hmsvp-card">
         <CardHeader>
-          <CardTitle>Dados da Ocorrência</CardTitle>
+          <CardTitle className="text-[#1b2b4b]">Dados da Ocorrência</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="p-3 text-sm text-red-500 bg-red-50 rounded-lg">
+              <div className="p-3 text-sm text-red-500 bg-red-50 border border-red-200 rounded-lg">
                 {error}
               </div>
             )}
@@ -170,7 +173,7 @@ export default function NewOccurrencePage() {
                   <SelectValue placeholder="Selecione o setor" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ADULTO" disabled className="font-bold">
+                  <SelectItem value="__ADULTO__" disabled className="font-bold">
                     ── ADULTO ──
                   </SelectItem>
                   {sectors
@@ -180,7 +183,7 @@ export default function NewOccurrencePage() {
                         {s.name}
                       </SelectItem>
                     ))}
-                  <SelectItem value="INFANTIL" disabled className="font-bold">
+                  <SelectItem value="__INFANTIL__" disabled className="font-bold">
                     ── INFANTIL ──
                   </SelectItem>
                   {sectors
@@ -232,7 +235,11 @@ export default function NewOccurrencePage() {
             </div>
 
             <div className="flex gap-4">
-              <Button type="submit" disabled={submitting} className="flex-1">
+              <Button
+                type="submit"
+                disabled={submitting}
+                className="flex-1 hmsvp-gradient text-white"
+              >
                 {submitting ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
