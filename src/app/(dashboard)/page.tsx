@@ -131,77 +131,75 @@ export default function DashboardPage() {
       </div>
 
       {/* Filtros */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-[#1b2b4b]">Ano</label>
-              <Select value={yearFilter} onValueChange={setYearFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Ano" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos os anos</SelectItem>
-                  <SelectItem value="2025">2025</SelectItem>
-                  <SelectItem value="2026">2026</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-[#1b2b4b]">Mês</label>
-              <Select value={monthFilter} onValueChange={setMonthFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Todos os meses" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos os meses</SelectItem>
-                  <SelectItem value="1">Janeiro</SelectItem>
-                  <SelectItem value="2">Fevereiro</SelectItem>
-                  <SelectItem value="3">Março</SelectItem>
-                  <SelectItem value="4">Abril</SelectItem>
-                  <SelectItem value="5">Maio</SelectItem>
-                  <SelectItem value="6">Junho</SelectItem>
-                  <SelectItem value="7">Julho</SelectItem>
-                  <SelectItem value="8">Agosto</SelectItem>
-                  <SelectItem value="9">Setembro</SelectItem>
-                  <SelectItem value="10">Outubro</SelectItem>
-                  <SelectItem value="11">Novembro</SelectItem>
-                  <SelectItem value="12">Dezembro</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-[#1b2b4b]">Setor</label>
-              <Select value={sectorFilter} onValueChange={setSectorFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Todos os setores" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todos os setores</SelectItem>
-                  <SelectItem value="__ADULTO__" disabled className="font-bold text-[#1b2b4b]">
-                    ── ADULTO ──
-                  </SelectItem>
-                  {sectors.filter((s) => s.type === "ADULTO" && s.year === parseInt(yearFilter || defaultYear)).map((s) => (
-                    <SelectItem key={s.id} value={s.id}>
-                      {s.name}
-                    </SelectItem>
-                  ))}
-                  <SelectItem value="__INFANTIL__" disabled className="font-bold text-[#1b2b4b]">
-                    ── INFANTIL ──
-                  </SelectItem>
-                  {sectors.filter((s) => s.type === "INFANTIL" && s.year === parseInt(yearFilter || defaultYear)).map((s) => (
-                    <SelectItem key={s.id} value={s.id}>
-                      {s.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+      <div className="bg-white rounded-lg border border-[#e9effa] p-6 shadow-sm">
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-[#1b2b4b]">Ano</label>
+            <Select value={yearFilter} onValueChange={setYearFilter}>
+              <SelectTrigger className="z-10">
+                <SelectValue placeholder="Ano" />
+              </SelectTrigger>
+              <SelectContent position="popper" className="z-50">
+                <SelectItem value="all">Todos os anos</SelectItem>
+                <SelectItem value="2025">2025</SelectItem>
+                <SelectItem value="2026">2026</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-        </CardContent>
-      </Card>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-[#1b2b4b]">Mês</label>
+            <Select value={monthFilter} onValueChange={setMonthFilter}>
+              <SelectTrigger className="z-10">
+                <SelectValue placeholder="Todos os meses" />
+              </SelectTrigger>
+              <SelectContent position="popper" className="z-50">
+                <SelectItem value="all">Todos os meses</SelectItem>
+                <SelectItem value="1">Janeiro</SelectItem>
+                <SelectItem value="2">Fevereiro</SelectItem>
+                <SelectItem value="3">Março</SelectItem>
+                <SelectItem value="4">Abril</SelectItem>
+                <SelectItem value="5">Maio</SelectItem>
+                <SelectItem value="6">Junho</SelectItem>
+                <SelectItem value="7">Julho</SelectItem>
+                <SelectItem value="8">Agosto</SelectItem>
+                <SelectItem value="9">Setembro</SelectItem>
+                <SelectItem value="10">Outubro</SelectItem>
+                <SelectItem value="11">Novembro</SelectItem>
+                <SelectItem value="12">Dezembro</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-[#1b2b4b]">Setor</label>
+            <Select value={sectorFilter} onValueChange={setSectorFilter}>
+              <SelectTrigger className="z-10">
+                <SelectValue placeholder="Todos os setores" />
+              </SelectTrigger>
+              <SelectContent position="popper" className="z-50">
+                <SelectItem value="all">Todos os setores</SelectItem>
+                <SelectItem value="__ADULTO__" disabled className="font-bold text-[#1b2b4b]">
+                  ── ADULTO ──
+                </SelectItem>
+                {sectors.filter((s) => s.type === "ADULTO" && s.year === parseInt(yearFilter || defaultYear)).map((s) => (
+                  <SelectItem key={s.id} value={s.id}>
+                    {s.name}
+                  </SelectItem>
+                ))}
+                <SelectItem value="__INFANTIL__" disabled className="font-bold text-[#1b2b4b]">
+                  ── INFANTIL ──
+                </SelectItem>
+                {sectors.filter((s) => s.type === "INFANTIL" && s.year === parseInt(yearFilter || defaultYear)).map((s) => (
+                  <SelectItem key={s.id} value={s.id}>
+                    {s.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
 
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-3">
