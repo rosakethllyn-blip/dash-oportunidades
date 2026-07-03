@@ -1,10 +1,7 @@
 "use client";
 
-export const dynamic = "force-dynamic";
 
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
+import { useRouter as useRouter2 } from "next/navigation";
 
 interface Sector {
   id: string;
@@ -31,9 +29,7 @@ interface Category {
 }
 
 export default function NewOccurrencePage() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data: session } = useSession();
-  const router = useRouter();
+  const router = useRouter2();
   const [sectors, setSectors] = useState<Sector[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
