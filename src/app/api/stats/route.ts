@@ -7,11 +7,13 @@ export async function GET(request: NextRequest) {
     const year = searchParams.get("year");
     const month = searchParams.get("month");
     const sectorId = searchParams.get("sectorId");
+    const categoryId = searchParams.get("categoryId");
 
     const where: Record<string, unknown> = {};
     if (year && year !== "all") where.year = parseInt(year);
     if (month && month !== "all") where.month = parseInt(month);
     if (sectorId && sectorId !== "all") where.sectorId = sectorId;
+    if (categoryId && categoryId !== "all") where.categoryId = categoryId;
 
     // Determinar ano efetivo para "este mês" / "mês anterior"
     const effectiveYear = (year && year !== "all") ? parseInt(year) : new Date().getFullYear();
