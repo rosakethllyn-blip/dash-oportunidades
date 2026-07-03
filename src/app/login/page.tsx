@@ -49,12 +49,12 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center p-4 hmsvp-gradient">
       <Card className="w-full max-w-md hmsvp-card">
         <CardHeader className="space-y-4 text-center pb-2">
-          {/* Logo HMSVP */}
+          {/* Logo HMSVP completa */}
           <div className="flex justify-center">
             <img
-              src="/logo-hmsvp.svg"
+              src="/logo-hmsvp-completo.svg"
               alt="Hospital Maternidade São Vicente de Paulo"
-              className="h-20 w-auto"
+              className="h-24 w-auto"
             />
           </div>
           <div>

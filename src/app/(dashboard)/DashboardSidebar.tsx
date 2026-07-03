@@ -52,14 +52,13 @@ export function DashboardSidebar() {
           <div className="p-6 border-b border-white/10">
             <div className="bg-white rounded-lg p-3 mb-3">
               <img
-                src="/logo-hmsvp.svg"
+                src="/logo-hmsvp-completo.svg"
                 alt="HMSVP"
-                className="h-12 w-auto mx-auto"
+                className="h-16 w-auto mx-auto"
               />
             </div>
-            <h1 className="text-lg font-bold text-center">Oportunidades</h1>
-            <p className="text-xs text-white/70 text-center mt-1">
-              Convênios Hospitalares
+            <p className="text-xs text-white/70 text-center mt-2">
+              Sistema de Oportunidades
             </p>
           </div>
 
