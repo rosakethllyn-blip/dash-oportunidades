@@ -1,26 +1,31 @@
 @import "tailwindcss";
 
+/* Cores Institucionais HMSVP - Manual de Marca */
 :root {
   --background: #ffffff;
-  --foreground: #171717;
-  --primary: #3b82f6;
+  --foreground: #1b2b4b;
+  --primary: #1b2b4b;        /* Azul Espacial */
   --primary-foreground: #ffffff;
-  --secondary: #f3f4f6;
-  --secondary-foreground: #171717;
+  --primary-light: #223978;  /* Azul Centáureo */
+  --primary-bright: #145799; /* Azul Deslumbrante */
+  --primary-sky: #408dcc;    /* Azul Celeste */
+  --primary-soft: #e9effa;   /* Cinza claro */
+  --secondary: #e9effa;
+  --secondary-foreground: #1b2b4b;
   --muted: #f3f4f6;
   --muted-foreground: #6b7280;
-  --accent: #f3f4f6;
-  --accent-foreground: #171717;
-  --destructive: #ef4444;
+  --accent: #145799;
+  --accent-foreground: #ffffff;
+  --destructive: #dc2626;
   --destructive-foreground: #ffffff;
-  --border: #e5e7eb;
-  --input: #e5e7eb;
-  --ring: #3b82f6;
+  --border: #e9effa;
+  --input: #e9effa;
+  --ring: #145799;
   --radius: 0.5rem;
   --card: #ffffff;
-  --card-foreground: #171717;
+  --card-foreground: #1b2b4b;
   --popover: #ffffff;
-  --popover-foreground: #171717;
+  --popover-foreground: #1b2b4b;
 }
 
 * {
@@ -30,4 +35,20 @@
 body {
   background-color: var(--background);
   color: var(--foreground);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Estilo HMSVP */
+.hmsvp-gradient {
+  background: linear-gradient(135deg, #1b2b4b 0%, #145799 100%);
+}
+
+.hmsvp-card {
+  background: #ffffff;
+  border: 1px solid #e9effa;
+  box-shadow: 0 1px 3px rgba(27, 43, 75, 0.05);
+}
+
+.hmsvp-shadow {
+  box-shadow: 0 4px 6px -1px rgba(27, 43, 75, 0.1);
 }
