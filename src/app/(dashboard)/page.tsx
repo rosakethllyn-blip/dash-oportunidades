@@ -38,18 +38,48 @@ interface Stats {
   bySector: { sectorId: string; name: string; type: string; total: number }[];
 }
 
+interface Sector {
+  id: string;
+  name: string;
+  type: string;
+}
+
 export default function DashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null);
+  const [sectors, setSectors] = useState<Sector[]>([]);
   const [loading, setLoading] = useState(true);
-  const [yearFilter, setYearFilter] = useState<string>("all");
+
+  // Padrão: ano vigente (2026)
+  const currentYear = new Date().getFullYear();
+  const defaultYear = currentYear >= 2026 ? "2026" : String(currentYear);
+
+  const [yearFilter, setYearFilter] = useState<string>(defaultYear);
+  const [monthFilter, setMonthFilter] = useState<string>("all");
+  const [sectorFilter, setSectorFilter] = useState<string>("all");
+
+  useEffect(() => {
+    const fetchSectors = async () => {
+      try {
+        const res = await fetch("/api/sectors");
+        const data = await res.json();
+        setSectors(data);
+      } catch (err) {
+        console.error("Erro setores:", err);
+      }
+    };
+    fetchSectors();
+  }, []);
 
   useEffect(() => {
     const fetchStats = async () => {
+      setLoading(true);
       try {
-        const url = yearFilter !== "all"
-          ? `/api/stats?year=${yearFilter}`
-          : "/api/stats";
-        const res = await fetch(url);
+        const params = new URLSearchParams();
+        if (yearFilter !== "all") params.set("year", yearFilter);
+        if (monthFilter !== "all") params.set("month", monthFilter);
+        if (sectorFilter !== "all") params.set("sectorId", sectorFilter);
+
+        const res = await fetch(`/api/stats?${params}`);
         const data = await res.json();
         setStats(data);
       } catch (error) {
@@ -60,9 +90,9 @@ export default function DashboardPage() {
     };
 
     fetchStats();
-  }, [yearFilter]);
+  }, [yearFilter, monthFilter, sectorFilter]);
 
-  const evolution = stats?.thisMonth && stats?.lastMonth
+  const evolution = stats?.lastMonth && stats.lastMonth > 0
     ? ((stats.thisMonth - stats.lastMonth) / stats.lastMonth) * 100
     : 0;
 
@@ -97,17 +127,80 @@ export default function DashboardPage() {
             Visão geral das ocorrências em convênios
           </p>
         </div>
-        <Select value={yearFilter} onValueChange={setYearFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Ano" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Todos os anos</SelectItem>
-            <SelectItem value="2025">2025</SelectItem>
-            <SelectItem value="2026">2026</SelectItem>
-          </SelectContent>
-        </Select>
       </div>
+
+      {/* Filtros */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-[#1b2b4b]">Ano</label>
+              <Select value={yearFilter} onValueChange={setYearFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Ano" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos os anos</SelectItem>
+                  <SelectItem value="2025">2025</SelectItem>
+                  <SelectItem value="2026">2026</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-[#1b2b4b]">Mês</label>
+              <Select value={monthFilter} onValueChange={setMonthFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Todos os meses" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos os meses</SelectItem>
+                  <SelectItem value="1">Janeiro</SelectItem>
+                  <SelectItem value="2">Fevereiro</SelectItem>
+                  <SelectItem value="3">Março</SelectItem>
+                  <SelectItem value="4">Abril</SelectItem>
+                  <SelectItem value="5">Maio</SelectItem>
+                  <SelectItem value="6">Junho</SelectItem>
+                  <SelectItem value="7">Julho</SelectItem>
+                  <SelectItem value="8">Agosto</SelectItem>
+                  <SelectItem value="9">Setembro</SelectItem>
+                  <SelectItem value="10">Outubro</SelectItem>
+                  <SelectItem value="11">Novembro</SelectItem>
+                  <SelectItem value="12">Dezembro</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-[#1b2b4b]">Setor</label>
+              <Select value={sectorFilter} onValueChange={setSectorFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Todos os setores" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos os setores</SelectItem>
+                  <SelectItem value="__ADULTO__" disabled className="font-bold text-[#1b2b4b]">
+                    ── ADULTO ──
+                  </SelectItem>
+                  {sectors.filter((s) => s.type === "ADULTO" && s.year === parseInt(yearFilter || defaultYear)).map((s) => (
+                    <SelectItem key={s.id} value={s.id}>
+                      {s.name}
+                    </SelectItem>
+                  ))}
+                  <SelectItem value="__INFANTIL__" disabled className="font-bold text-[#1b2b4b]">
+                    ── INFANTIL ──
+                  </SelectItem>
+                  {sectors.filter((s) => s.type === "INFANTIL" && s.year === parseInt(yearFilter || defaultYear)).map((s) => (
+                    <SelectItem key={s.id} value={s.id}>
+                      {s.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-3">
@@ -117,22 +210,24 @@ export default function DashboardPage() {
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{stats?.total || 0}</div>
+            <div className="text-3xl font-bold text-[#1b2b4b]">{stats?.total || 0}</div>
             <p className="text-xs text-muted-foreground">
-              Em todos os registros
+              {yearFilter === "all" ? "Todos os anos" : `Ano ${yearFilter}`}
+              {monthFilter !== "all" && ` • ${formatMonth(parseInt(monthFilter))}`}
+              {sectorFilter !== "all" && ` • 1 setor`}
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Este Mês</CardTitle>
+            <CardTitle className="text-sm font-medium">Período Selecionado</CardTitle>
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{stats?.thisMonth || 0}</div>
+            <div className="text-3xl font-bold text-[#145799]">{stats?.thisMonth || 0}</div>
             <p className="text-xs text-muted-foreground">
-              {formatMonth(new Date().getMonth() + 1)}
+              {monthFilter !== "all" ? formatMonth(parseInt(monthFilter)) : "Último mês"}
             </p>
           </CardContent>
         </Card>
@@ -151,7 +246,7 @@ export default function DashboardPage() {
               {evolution >= 0 ? "+" : ""}{evolution.toFixed(1)}%
             </div>
             <p className="text-xs text-muted-foreground">
-              vs. mês anterior
+              vs. período anterior
             </p>
           </CardContent>
         </Card>
@@ -165,21 +260,27 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={monthData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" fontSize={12} tickLine={false} />
-                  <YAxis fontSize={12} tickLine={false} />
-                  <Tooltip />
-                  <Line
-                    type="monotone"
-                    dataKey="total"
-                    stroke="#145799"
-                    strokeWidth={2}
-                    dot={{ fill: "#1b2b4b" }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+              {monthData.length === 0 ? (
+                <div className="flex items-center justify-center h-full text-muted-foreground">
+                  Nenhum dado no período selecionado
+                </div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={monthData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" fontSize={12} tickLine={false} />
+                    <YAxis fontSize={12} tickLine={false} />
+                    <Tooltip />
+                    <Line
+                      type="monotone"
+                      dataKey="total"
+                      stroke="#145799"
+                      strokeWidth={2}
+                      dot={{ fill: "#1b2b4b" }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -190,24 +291,30 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={categoryData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
-                    paddingAngle={2}
-                    dataKey="value"
-                  >
-                    {categoryData.map((_, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
+              {categoryData.length === 0 ? (
+                <div className="flex items-center justify-center h-full text-muted-foreground">
+                  Nenhum dado
+                </div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={categoryData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={100}
+                      paddingAngle={2}
+                      dataKey="value"
+                    >
+                      {categoryData.map((_, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              )}
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
               {categoryData.slice(0, 6).map((item, index) => (
@@ -229,28 +336,34 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={stats?.bySector?.map((s) => ({
-                    name: s.name.slice(0, 15),
-                    total: s.total,
-                    type: s.type,
-                  }))}
-                  layout="vertical"
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis type="number" fontSize={12} />
-                  <YAxis dataKey="name" type="category" fontSize={10} width={100} />
-                  <Tooltip />
-                  <Bar dataKey="total" fill="#145799" radius={[0, 4, 4, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
+              {stats?.bySector && stats.bySector.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={stats.bySector.map((s) => ({
+                      name: s.name.slice(0, 15),
+                      total: s.total,
+                      type: s.type,
+                    }))}
+                    layout="vertical"
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis type="number" fontSize={12} />
+                    <YAxis dataKey="name" type="category" fontSize={10} width={100} />
+                    <Tooltip />
+                    <Bar dataKey="total" fill="#145799" radius={[0, 4, 4, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="flex items-center justify-center h-full text-muted-foreground">
+                  Nenhum dado
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Top Categories */}
+      {/* Top Categorias */}
       <Card>
         <CardHeader>
           <CardTitle>Principais Ocorrências</CardTitle>
@@ -269,12 +382,13 @@ export default function DashboardPage() {
                   <div className="ml-4 flex items-center gap-4">
                     <div className="w-32 bg-gray-200 rounded-full h-2">
                       <div
-                        className="bg-primary h-2 rounded-full"
+                        className="h-2 rounded-full"
                         style={{
                           width: `${Math.min(
                             100,
                             ((category.total || 0) / (stats?.total || 1)) * 100
                           )}%`,
+                          backgroundColor: "#145799",
                         }}
                       />
                     </div>
