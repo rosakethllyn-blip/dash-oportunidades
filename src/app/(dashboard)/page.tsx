@@ -26,7 +26,7 @@ import {
 import { formatMonth } from "@/lib/utils";
 import { TrendingUp, TrendingDown, AlertCircle, CheckCircle } from "lucide-react";
 
-const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899"];
+const COLORS = ["#1b2b4b", "#145799", "#408dcc", "#223978", "#8B5CF6", "#EC4899"];
 
 interface Stats {
   total: number;
@@ -173,9 +173,9 @@ export default function DashboardPage() {
                   <Line
                     type="monotone"
                     dataKey="total"
-                    stroke="#3B82F6"
+                    stroke="#145799"
                     strokeWidth={2}
-                    dot={{ fill: "#3B82F6" }}
+                    dot={{ fill: "#1b2b4b" }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -241,7 +241,7 @@ export default function DashboardPage() {
                   <XAxis type="number" fontSize={12} />
                   <YAxis dataKey="name" type="category" fontSize={10} width={100} />
                   <Tooltip />
-                  <Bar dataKey="total" fill="#3B82F6" radius={[0, 4, 4, 0]} />
+                  <Bar dataKey="total" fill="#145799" radius={[0, 4, 4, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
